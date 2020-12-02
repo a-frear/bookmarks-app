@@ -1,5 +1,5 @@
 import React, { Component } from  'react';
-import { withRouter } from 'react-router-dom';
+import BookmarkContext from '../BookmarkContext';
 import config from '../config'
 import './AddBookmark.css';
 
@@ -8,9 +8,7 @@ const Required = () => (
 )
 
 class AddBookmark extends Component {
-  static defaultProps = {
-    onAddBookmark: () => {}
-  };
+  static contextType = BookmarkContext;
 
   state = {
     error: null,
@@ -50,12 +48,16 @@ class AddBookmark extends Component {
         url.value = ''
         description.value = ''
         rating.value = ''
+        this.context.addBookmark(data)
         this.props.history.push('/')
-        this.props.onAddBookmark(data)
       })
       .catch(error => {
         this.setState({ error })
       })
+  }
+
+  handleClickCancel = () => {
+    this.props.history.push('/')
   }
 
   render() {
@@ -125,7 +127,7 @@ class AddBookmark extends Component {
             />
           </div>
           <div className='AddBookmark__buttons'>
-            <button type='button' onClick={onClickCancel}>
+          <button type='button' onClick={this.handleClickCancel}>
               Cancel
             </button>
             {' '}
@@ -139,4 +141,4 @@ class AddBookmark extends Component {
   }
 }
 
-export default withRouter(AddBookmark);
+export default AddBookmark;
