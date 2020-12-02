@@ -35,7 +35,7 @@ function deleteBookmarkRequest(bookmarkId, callback) {
 export default function BookmarkItem(props) {
   return (
    <BookmarksContext.Consumer>
-+      {(context) => (
+      {(context) => (
           <li className='BookmarkItem'>
             <div className='BookmarkItem__row'>
               <h3 className='BookmarkItem__title'>
