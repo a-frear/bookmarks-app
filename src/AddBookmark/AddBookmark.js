@@ -62,7 +62,6 @@ class AddBookmark extends Component {
 
   render() {
     const { error } = this.state
-    const { onClickCancel } = this.props
     return (
       <section className='AddBookmark'>
         <h2>Create a bookmark</h2>

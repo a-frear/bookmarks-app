@@ -4,8 +4,9 @@ import AddBookmark from './AddBookmark/AddBookmark';
 import BookmarkList from './BookmarkList/BookmarkList';
 import BookmarksContext from './BookmarkContext';
 import Nav from './Nav/Nav';
-import config from './config';
+import config from './config'
 import './App.css';
+import EditBookmark from './EditBookmark/EditBookmark';
 
 class App extends Component {
   state = {
@@ -39,17 +40,27 @@ class App extends Component {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
-        'Authorization': `Bearer ${config.API_KEY}`
+        'Authorization': `Bearer ${config.API_TOKEN}`
       }
     })
       .then(res => {
         if (!res.ok) {
-          throw new Error(res.status)
+          return res.json().then(error => Promise.reject(error))
         }
         return res.json()
       })
       .then(this.setBookmarks)
-      .catch(error => this.setState({ error }))
+      .catch(error => {
+        console.error(error)
+        this.setState({ error })
+      })
+  }
+  updateBookmark = updatedBookmark => {
+    this.setState({
+      bookmarks: this.state.bookmarks.map(bm =>
+        (bm.id !== updatedBookmark.id) ? bm : updatedBookmark
+      )
+    })
   }
 
   render() {
@@ -57,6 +68,7 @@ class App extends Component {
       bookmarks: this.state.bookmarks,
       addBookmark: this.addBookmark,
       deleteBookmark: this.deleteBookmark,
+      updateBookmark: this.updateBookmark,
     }
     return (
       <main className='App'>
@@ -73,6 +85,10 @@ class App extends Component {
               path='/'
               component={BookmarkList}
             />
+            <Route
+              path='/edit/:bookmarkId'
+              component={EditBookmark}
+              />
           </div>
         </BookmarksContext.Provider>
       </main>
